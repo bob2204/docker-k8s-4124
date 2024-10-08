@@ -1,0 +1,7 @@
+---
+name: tp_4
+services:
+  web:
+    image: nginx:1.26
+    container_name: http
+    hostname: srvweb
