@@ -32,6 +32,22 @@ services:
     networks:
       stagenet:
         ipv4_address: 172.100.0.110
+  db:
+    image: mariadb:10.8
+    container_name: mariadb
+    hostname: mariadb
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+      - datadir:/var/lib/mysql
+    networks:
+      stagenet:
+        ipv4_address: 172.100.0.120
+    environment:
+      MARIADB_ROOT_PASSWORD: azerty
+      MARIADB_DATABASE: stage
+
+volumes:
+  datadir:
 
 networks:
   stagenet:
