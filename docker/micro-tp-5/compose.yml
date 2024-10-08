@@ -11,6 +11,9 @@ services:
         target: /usr/share/nginx/html
         bind:
           create_host_path: false
+      - type: bind
+        source: ../../nginx-conf
+        target: /etc/nginx/conf.d
     ports:
       - 80:80
     networks:
