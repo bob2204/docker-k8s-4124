@@ -1,0 +1,39 @@
+---
+name: demo
+services:
+  web:
+    image: nginx:1.26
+    container_name: http
+    hostname: srvweb
+    volumes:
+      - type: bind
+        source: ../site
+        target: /usr/share/nginx/html
+        bind:
+          create_host_path: false
+      - type: volume
+        source: data
+        target: /mnt
+    environment:
+      - Var_1=valeur
+      - Var_2=valeur
+      - Var_3=valeur
+    env_file:
+      - http.env
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      stagenet:
+        ipv4_address: 172.100.0.100
+
+volumes:
+  data:
+
+networks:
+  stagenet:
+    ipam:
+      config:
+        - subnet: 172.100.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: stagenet0
