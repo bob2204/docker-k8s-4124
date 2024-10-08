@@ -1,0 +1,39 @@
+---
+name: lemp
+services:
+  web:
+    image: nginx:1.26
+    container_name: http
+    hostname: srvweb
+    volumes:
+      - type: bind
+        source: ../../site
+        target: /usr/share/nginx/html
+        bind:
+          create_host_path: false
+    ports:
+      - 80:80
+    networks:
+      stagenet:
+        ipv4_address: 172.100.0.100
+  php:
+    image: php:8.2-fpm
+    container_name: php
+    hostname: php
+    volumes:
+      - type: bind
+        source: ../../site
+        target: /var/www/html
+        bind:
+          create_host_path: false
+    networks:
+      stagenet:
+        ipv4_address: 172.100.0.110
+
+networks:
+  stagenet:
+    ipam:
+      config:
+        - subnet: 172.100.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: stagenet0
