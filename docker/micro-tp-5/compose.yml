@@ -1,4 +1,11 @@
 ---
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: ${LOGGING_MAX_SIZE}
+      max-file: ${LOGGING_MAX_FILE}
+
 name: lemp
 services:
   web:
@@ -19,6 +26,8 @@ services:
     networks:
       stagenet:
         ipv4_address: ${STAGENET_PREFIX}.${NGINX_IPV4}
+    <<: *default-logging
+
   php:
     image: php:${PHP_IMAGE_TAG}
     container_name: php
@@ -32,6 +41,8 @@ services:
     networks:
       stagenet:
         ipv4_address: ${STAGENET_PREFIX}.${PHP_IPV4}
+    <<: *default-logging
+
   db:
     image: mariadb:${MARIADB_IMAGE_TAG}
     container_name: mariadb
@@ -45,6 +56,7 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: azerty
       MARIADB_DATABASE: stage
+    <<: *default-logging
 
 volumes:
   datadir:
