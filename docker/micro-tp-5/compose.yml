@@ -2,7 +2,7 @@
 name: lemp
 services:
   web:
-    image: nginx:1.26
+    image: nginx:${NGINX_IMAGE_TAG:-1.23}
     container_name: http
     hostname: srvweb
     volumes:
@@ -15,12 +15,12 @@ services:
         source: ../../nginx-conf
         target: /etc/nginx/conf.d
     ports:
-      - 80:80
+      - ${NGINX_EXTERNAL_PORT}:80
     networks:
       stagenet:
-        ipv4_address: 172.100.0.100
+        ipv4_address: ${STAGENET_PREFIX}.${NGINX_IPV4}
   php:
-    image: php:8.2-fpm
+    image: php:${PHP_IMAGE_TAG}
     container_name: php
     hostname: php
     volumes:
@@ -31,9 +31,9 @@ services:
           create_host_path: false
     networks:
       stagenet:
-        ipv4_address: 172.100.0.110
+        ipv4_address: ${STAGENET_PREFIX}.${PHP_IPV4}
   db:
-    image: mariadb:10.8
+    image: mariadb:${MARIADB_IMAGE_TAG}
     container_name: mariadb
     hostname: mariadb
     volumes:
@@ -41,7 +41,7 @@ services:
       - datadir:/var/lib/mysql
     networks:
       stagenet:
-        ipv4_address: 172.100.0.120
+        ipv4_address: ${STAGENET_PREFIX}.${MARIADB_IPV4}
     environment:
       MARIADB_ROOT_PASSWORD: azerty
       MARIADB_DATABASE: stage
@@ -53,6 +53,6 @@ networks:
   stagenet:
     ipam:
       config:
-        - subnet: 172.100.0.0/16
+        - subnet: ${STAGENET_PREFIX}.0.0/16
     driver_opts:
       com.docker.network.bridge.name: stagenet0
