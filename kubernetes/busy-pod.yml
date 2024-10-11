@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: busy
+  name: busy
+spec:
+  containers:
+  - image: busybox
+    name: busy
+    volumeMounts:
+      - name: partage
+        mountPath: /données
+    command:
+      - sleep
+      - infinity
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+    - name: partage
+      hostPath:
+        path: /data/partage
+        type: Directory
