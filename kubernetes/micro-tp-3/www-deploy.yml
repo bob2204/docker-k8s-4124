@@ -21,8 +21,13 @@ spec:
           - name: site
             mountPath: /usr/share/nginx/html
             readOnly: true
+          - name: conf
+            mountPath: /etc/nginx/conf.d
       volumes:
         - name: site
           hostPath:
             path: /data/site
             type: Directory
+        - name: conf
+          configMap:
+            name: nginx-conf
